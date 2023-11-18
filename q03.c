@@ -17,6 +17,11 @@ int main (int argc , char *argv[]) {
     int qtdElementos = atoi(argv[1]);
     pElementos = malloc(qtdElementos * sizeof(int));
 
+    if(pElementos == NULL) {
+        puts("Memória não alocada!");
+        exit(1);
+    }
+
     gerarValoresAleatorios(pElementos, qtdElementos);
     exibirValores(pElementos, qtdElementos);
     exibirValoresExtremos(pElementos , qtdElementos);
@@ -38,19 +43,30 @@ void exibirValores(int *p , int q) {
 }
 
 void exibirValoresExtremos(int *p , int q) {
-    int *valoresExtremos;
-    valoresExtremos = malloc(2 * sizeof(int));
-    int *maiorValor = p+0;
-    int *menorValor = p+0;
-    for(int k = 1; k < q; k++) {
-        menorValor = *menorValor < *(p+k) ? menorValor : (p+k);
-    }
-    valoresExtremos = menorValor;
+    int *valoresExtremos = malloc(2 * sizeof(int));
 
-    for(int j = 1; j < q; j++) {
-        maiorValor = *maiorValor > *(p+j) ? maiorValor : (p+j);
+    if (valoresExtremos == NULL) {
+        puts("Memória não alocada!");
+        exit(2);
     }
-    valoresExtremos = maiorValor;
-    printf("Maior valor: %d | Endereço : %p\n", *valoresExtremos, valoresExtremos);
-    printf("Menor valor: %d | Endereço : %p\n", *(valoresExtremos+1), (valoresExtremos+1));
+
+    int *maiorValor = p;
+    int *menorValor = p;
+
+    for (int k = 1; k < q; k++) {
+        if (*(p + k) > *maiorValor) {
+            maiorValor = p+k;
+        }
+        if (*(p + k) < *menorValor) {
+            menorValor = p+k;
+        }
+    }
+
+    valoresExtremos[0] = *menorValor;
+    valoresExtremos[1] = *maiorValor;
+
+    printf("Maior valor: %d | Endereço : %p\n", valoresExtremos[1], maiorValor);
+    printf("Menor valor: %d | Endereço : %p\n", valoresExtremos[0], menorValor);
+
+    free(valoresExtremos);
 }
