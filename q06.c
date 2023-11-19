@@ -6,6 +6,7 @@ void gerarValoresAleatorios(int *, int);
 void exibirValores(int *, int);
 void calcMediaVetor(int *, int);
 void calcMedianaVetor(int *, int); 
+int *calcModaVetor(int *, int);
 
 int main (int argc , char *argv[]) {
     int *pElementos;
@@ -19,7 +20,9 @@ int main (int argc , char *argv[]) {
     gerarValoresAleatorios(pElementos, qtdElementos);
     exibirValores(pElementos, qtdElementos);
     // calcMediaVetor(pElementos , qtdElementos);
-    calcMedianaVetor(pElementos , qtdElementos);
+    // calcMedianaVetor(pElementos , qtdElementos);
+    int *elementoMaisFrequente = calcModaVetor(pElementos , qtdElementos);
+    printf("Elemento mais frequente : %d" , *elementoMaisFrequente);
 
     free(pElementos);
 }
@@ -65,10 +68,32 @@ void calcMedianaVetor(int *p , int q) {
 
     if(!(q % 2)){
         valorMediana = (*(p+(q/2)) + *(p+((q/2) - 1))) / 2;
-        printf("Mediana : %.2f" , valorMediana);
+        printf("Mediana : %.2f\n" , valorMediana);
     }else {
         valorMediana = *(p+(q/2));
-        printf("Mediana : %.2f" , valorMediana);
+        printf("Mediana : %.2f\n" , valorMediana);
     }
 
+}
+
+int *calcModaVetor(int *p, int q) {
+    int *contagem = malloc(q * sizeof(int));
+    int *elementoMaisFrequente;
+    int maxContagem = 1;
+
+    for (int k = 0; k < q; k++){
+        contagem[k] = 0;
+    }
+
+    for(int i = 0; i < q; i++) {
+        contagem[p[i]]++;
+
+        if(contagem[p[i]] > maxContagem) {
+            maxContagem = contagem[p[i]];
+            elementoMaisFrequente = &p[i];
+        }
+    }
+
+    free(contagem);
+    return elementoMaisFrequente;
 }
